@@ -100,3 +100,11 @@ with open(SALES_PATH, "r") as f:
         summary[product] = summary.get(product, 0) + revenue
 for product in sorted(summary):
     print(f"{product}: ${summary[product]:,.2f}")
+
+# ---------- Exercise 8: Append mode log ----------
+print("\nExercise 8: Append mode log")
+now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+with open(LOG_PATH, "a") as f:
+    f.write(f"{now} - Total revenue: ${total_revenue:,.2f}\n")
+with open(LOG_PATH, "r") as f:
+    print(f.read())
