@@ -44,3 +44,30 @@ with open(SALES_PATH, "r") as f:
     print("Header:", header)
     for row in reader:
         print(row)
+
+# ---------- Exercise 4: Compute totals ----------
+print("\nExercise 4: Compute totals")
+orders = []
+total_revenue = 0
+with open(SALES_PATH, "r") as f:
+    reader = csv.reader(f)
+    next(reader)  # skip the header row
+    for row in reader:
+        product, price_str, qty_str = row
+        price = float(price_str)
+        qty = int(qty_str)
+        total = price * qty
+        orders.append([product, price, qty, total])
+        total_revenue += total
+        print(f"{product}: {qty} units × ${price:.2f} = ${total:.2f}")
+print(f"Total revenue: ${total_revenue:,.2f}")
+
+# ---------- Exercise 5: Filter and write ----------
+print("\nExercise 5: Filter and write")
+high_value = [order for order in orders if order[3] > 100]
+with open(CLEANED_PATH, "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Product", "Price", "Qty", "Total"])
+    for product, price, qty, total in high_value:
+        writer.writerow([product, f"{price:.2f}", qty, f"{total:.2f}"])
+print(f"Wrote {len(high_value)} of {len(orders)} rows to {CLEANED_PATH}")
