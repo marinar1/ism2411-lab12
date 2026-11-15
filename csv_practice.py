@@ -71,3 +71,32 @@ with open(CLEANED_PATH, "w", newline="") as f:
     for product, price, qty, total in high_value:
         writer.writerow([product, f"{price:.2f}", qty, f"{total:.2f}"])
 print(f"Wrote {len(high_value)} of {len(orders)} rows to {CLEANED_PATH}")
+
+# ---------- Exercise 6: csv.DictReader ----------
+# csv.reader gives each row as a list, so you use positions like row[1]. It is fine for small, simple files.
+# csv.DictReader gives each row as a dictionary, so you use names like row["price"]. It is better when there are many columns or the column order changes.
+print("\nExercise 6: csv.DictReader")
+dict_total = 0
+with open(SALES_PATH, "r") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        product = row["product"]
+        price = float(row["price"])
+        qty = int(row["quantity"])
+        total = price * qty
+        dict_total += total
+        print(f"{product}: {qty} units × ${price:.2f} = ${total:.2f}")
+print(f"Total revenue: ${dict_total:,.2f}")
+print("Same total as Exercise 4:", round(dict_total, 2) == round(total_revenue, 2))
+
+# ---------- Exercise 7: Sales summary by product ----------
+print("\nExercise 7: Sales summary by product")
+summary = {}
+with open(SALES_PATH, "r") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        product = row["product"]
+        revenue = float(row["price"]) * int(row["quantity"])
+        summary[product] = summary.get(product, 0) + revenue
+for product in sorted(summary):
+    print(f"{product}: ${summary[product]:,.2f}")
